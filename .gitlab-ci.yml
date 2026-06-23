@@ -1,0 +1,31 @@
+stages:
+  - build
+
+build_and_push:
+  stage: build
+  image: docker:latest
+  services:
+    - name: docker:dind
+      command: [
+        "--insecure-registry=registry-gitlab-dtic.finanzas.gob.ec",
+        "--insecure-registry=gitlab-dtic.finanzas.gob.ec"
+      ]
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^\d{4}-\d{4}-\d{2}-(DEV|PROD)$/'
+  tags:
+    - shared
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_BUILDKIT: "0"
+    IMAGE_NAME: registry-gitlab-dtic.finanzas.gob.ec/development/infrastructure/sgdi-base/sgdi-base
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    # Extract tag
+    - export IMAGE_TAG=$(git rev-parse HEAD)
+    - export VERSION_TAG=$(git describe --tags --exact-match $IMAGE_TAG || echo "")
+    # Build and push
+    - docker compose build --push
+    - docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:$VERSION_TAG
+    - docker push $IMAGE_NAME:$VERSION_TAG
