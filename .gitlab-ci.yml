@@ -25,7 +25,6 @@ build_and_push:
     # Extract tag
     - export IMAGE_TAG=$(git rev-parse HEAD)
     - export VERSION_TAG=$(git describe --tags --exact-match $IMAGE_TAG || echo "")
-    # Build and push
-    - docker compose build --push
-    - docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:$VERSION_TAG
+    # Build with Dockerfile and push
+    - docker build -t $IMAGE_NAME:$VERSION_TAG .
     - docker push $IMAGE_NAME:$VERSION_TAG
