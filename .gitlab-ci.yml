@@ -3,9 +3,9 @@ stages:
 
 build_and_push:
   stage: build
-  image: docker:latest
+  image: docker:29.6.0-cli
   services:
-    - name: docker:dind
+    - name: docker:29.6.0-dind
       command: [
         "--insecure-registry=registry-gitlab-dtic.finanzas.gob.ec",
         "--insecure-registry=gitlab-dtic.finanzas.gob.ec"
