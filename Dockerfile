@@ -37,17 +37,6 @@ RUN a2enmod rewrite && \
     a2enmod remoteip && \
     a2enmod headers
 
-# Copy finanzas.gob.ec certificate into the container
-COPY conf/wildcard-finanzas-gob-ec-ca.pem /tmp/
-
-# Append it to the system-wide CA bundle
-RUN cat /tmp/wildcard-finanzas-gob-ec-ca.pem >> /etc/ssl/certs/ca-certificates.crt && \
-    rm /tmp/wildcard-finanzas-gob-ec-ca.pem
-
-# Ensure PHP points to this file in php.ini
-RUN echo 'curl.cainfo="/etc/ssl/certs/ca-certificates.crt"' > /usr/local/etc/php/conf.d/99-ca-certs.ini && \
-    echo 'openssl.cafile="/etc/ssl/certs/ca-certificates.crt"' >> /usr/local/etc/php/conf.d/99-ca-certs.ini
-
 WORKDIR /var/www/html
 EXPOSE 80
 CMD ["apache2-foreground"]
