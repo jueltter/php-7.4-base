@@ -2,7 +2,8 @@ FROM php:7.4-apache
 
 # Configurar APT
 RUN echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/10no-check-valid-until && \
-    echo 'Acquire::Check-Date "false";' >> /etc/apt/apt.conf.d/10no-check-valid-until
+    echo 'Acquire::Check-Date "false";' >> /etc/apt/apt.conf.d/10no-check-valid-until && \
+    sed -i 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list
 
 # Instalar dependencias
 RUN apt-get update && \
@@ -37,7 +38,11 @@ RUN a2enmod rewrite && \
     a2enmod remoteip && \
     a2enmod headers
 
+COPY src/ /var/www/html/
+
+RUN chown -R www-data:www-data /var/www/html && \
+    chmod -R 755 /var/www/html
+
 WORKDIR /var/www/html
 EXPOSE 80
 CMD ["apache2-foreground"]
-

@@ -1,0 +1,11 @@
+name: php-7.4
+
+services:
+  php-7.4:
+    build:
+      context: .
+    container_name: php-7.4
+    image: php-7.4-base:local
+    ports:
+      - "4001:80"
+    restart: unless-stopped
