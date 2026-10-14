@@ -1,4 +1,9 @@
-# sgdi-base
+# php-7.4-base
+
+## Usage Guide
+```bash
+docker compose up -d
+```
 
 ## License
 

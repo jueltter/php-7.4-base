@@ -37,6 +37,8 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
 RUN a2enmod rewrite && \
     a2enmod remoteip && \
     a2enmod headers
+    # a2enmod headers && \
+    # printf 'DirectoryIndex index.php index.html\n' > /etc/apache2/mods-enabled/dir.conf
 
 COPY src/ /var/www/html/
 

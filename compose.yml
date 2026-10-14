@@ -7,5 +7,5 @@ services:
     container_name: php-7.4
     image: php-7.4-base:local
     ports:
-      - "4001:80"
+      - "3999:80"
     restart: unless-stopped
